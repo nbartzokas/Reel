@@ -1460,7 +1460,7 @@
                   //
                   down: function(e, x, y, ev){
                     if (!opt.clickfree && ev && ev.button !== undefined && ev.button != DRAG_BUTTON) return;
-                    if (opt.draggable){
+                    if (opt.draggable && t.data('draggable')!==false ){
                       var
                         clicked= set(_clicked_, get(_frame_)),
                         clickfree= opt.clickfree,
@@ -1476,7 +1476,13 @@
                         .bind(_touchend_+___+_touchcancel_, lift)
                         .bind(clickfree ? _mouseleave_ : _mouseup_, lift)
                     }
-                    function drag(e){ return t.trigger('pan', [pointer(e).clientX, pointer(e).clientY, e]) && e.give }
+                    function drag(e){ 
+                        if (t.data('draggable')===false){
+                            return t.trigger('up', [e]) && e.give;
+                        }else{
+                            return t.trigger('pan', [pointer(e).clientX, pointer(e).clientY, e]) && e.give;
+                        }
+                    }
                     function lift(e){ return t.trigger('up', [e]) && e.give }
                   },
 
